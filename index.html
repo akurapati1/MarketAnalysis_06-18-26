@@ -1,0 +1,880 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily Market Briefing — Thursday, June 18, 2026</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elev: #141821;
+    --bg-card: #1a1f2b;
+    --border: #2a3142;
+    --text: #e6e9ef;
+    --text-dim: #9aa3b3;
+    --text-faint: #6b7280;
+    --accent: #6ea8ff;
+    --green: #16a34a;
+    --green-bg: rgba(22, 163, 74, 0.10);
+    --green-border: rgba(22, 163, 74, 0.35);
+    --red: #dc2626;
+    --red-bg: rgba(220, 38, 38, 0.10);
+    --red-border: rgba(220, 38, 38, 0.35);
+    --amber: #f59e0b;
+    --amber-bg: rgba(245, 158, 11, 0.08);
+    --amber-border: rgba(245, 158, 11, 0.45);
+    /* IBS band colors */
+    --ibs-red: #dc2626;
+    --ibs-yellow: #ca8a04;
+    --ibs-orange: #ea580c;
+    --ibs-green: #16a34a;
+  }
+  [data-theme="light"] {
+    --bg: #f7f8fa;
+    --bg-elev: #ffffff;
+    --bg-card: #ffffff;
+    --border: #e2e5eb;
+    --text: #1a1d24;
+    --text-dim: #4a525e;
+    --text-faint: #7a8290;
+    --accent: #2563eb;
+    --green-bg: rgba(22, 163, 74, 0.08);
+    --green-border: rgba(22, 163, 74, 0.30);
+    --red-bg: rgba(220, 38, 38, 0.08);
+    --red-border: rgba(220, 38, 38, 0.30);
+    --amber-bg: rgba(245, 158, 11, 0.10);
+    --amber-border: rgba(245, 158, 11, 0.55);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px; line-height: 1.55;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 80px; }
+
+  /* Header */
+  header.briefing {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px;
+    gap: 20px; flex-wrap: wrap;
+  }
+  header.briefing .title h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  header.briefing .title .meta { color: var(--text-dim); font-size: 13px; }
+  header.briefing .title .summary { margin-top: 12px; color: var(--text-dim); font-size: 15px; max-width: 780px; }
+  .index-strip {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px;
+    font-size: 12.5px; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  .index-strip .idx { color: var(--text-dim); }
+  .index-strip .idx b { color: var(--text); font-weight: 600; }
+  .index-strip .pos { color: var(--green); }
+  .index-strip .neg { color: var(--red); }
+  .theme-toggle {
+    background: var(--bg-elev); color: var(--text); border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px 14px; font-size: 13px; cursor: pointer;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  /* Section headings */
+  h2.section { font-size: 20px; margin: 40px 0 16px; font-weight: 600; }
+  h3.subsection {
+    font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-dim); margin: 18px 0 10px; font-weight: 600;
+  }
+
+  /* ===== HIGH-VOLTAGE INTRADAY SECTION ===== */
+  .hv-wrap {
+    border: 1.5px solid var(--amber-border); border-radius: 14px;
+    background: var(--amber-bg); padding: 22px; margin-top: 8px;
+    box-shadow: 0 0 0 1px rgba(245,158,11,0.06), 0 8px 30px rgba(245,158,11,0.05);
+  }
+  .hv-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 22px; font-weight: 800; color: var(--amber); margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .hv-sub { color: var(--text-dim); font-size: 13.5px; margin: 0 0 16px; max-width: 820px; }
+  .hv-banner {
+    background: rgba(245,158,11,0.12); border: 1px solid var(--amber-border);
+    border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: var(--text);
+    margin-bottom: 18px; line-height: 1.5;
+  }
+  .hv-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 860px) { .hv-cols { grid-template-columns: 1fr; } }
+  .hv-col { }
+  .hv-col-head {
+    font-size: 16px; font-weight: 700; margin: 0 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hv-col.longs .hv-col-head { color: var(--green); }
+  .hv-col.shorts .hv-col-head { color: var(--red); }
+  .hv-market-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-faint); font-weight: 700; margin: 14px 0 8px;
+  }
+
+  .hv-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;
+  }
+  .hv-card.long { border-left: 4px solid var(--green); }
+  .hv-card.short { border-left: 4px solid var(--red); }
+  .hv-card.watch { border-left: 4px solid var(--amber); }
+  .hv-card-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 10px; flex-wrap: wrap; margin-bottom: 4px;
+  }
+  .hv-card .tkr {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-weight: 700; font-size: 17px;
+  }
+  .hv-card .co { color: var(--text-dim); font-size: 12.5px; }
+  .hv-card .px { font-size: 12.5px; color: var(--text); font-family: ui-monospace, monospace; }
+  .hv-card .chg.pos { color: var(--green); font-weight: 600; }
+  .hv-card .chg.neg { color: var(--red); font-weight: 600; }
+
+  .conv-tag {
+    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.04em;
+    padding: 2px 8px; border-radius: 20px; vertical-align: middle;
+  }
+  .conv-fire { background: rgba(22,163,74,0.15); color: var(--ibs-green); border: 1px solid var(--green-border); }
+  .conv-mod  { background: rgba(234,88,12,0.15); color: var(--ibs-orange); border: 1px solid rgba(234,88,12,0.4); }
+  .conv-spec { background: rgba(202,138,4,0.15); color: var(--ibs-yellow); border: 1px solid rgba(202,138,4,0.4); }
+  .conv-watch{ background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid var(--amber-border); }
+
+  /* IBS progress bar */
+  .ibs-row { display: flex; align-items: center; gap: 10px; margin: 10px 0 6px; }
+  .ibs-bar-track {
+    flex: 1; height: 14px; background: #1e293b; border-radius: 8px; overflow: hidden;
+    position: relative; border: 1px solid var(--border);
+  }
+  [data-theme="light"] .ibs-bar-track { background: #e2e8f0; }
+  .ibs-bar-fill { height: 100%; border-radius: 8px 0 0 8px; transition: width .4s ease; }
+  .ibs-score-num { font-family: ui-monospace, monospace; font-weight: 800; font-size: 15px; min-width: 56px; text-align: right; }
+  .ibs-score-num small { font-size: 10px; color: var(--text-faint); font-weight: 600; }
+
+  .expected-move {
+    font-size: 13px; margin: 8px 0; padding: 7px 10px; border-radius: 6px;
+    background: var(--bg-elev); border: 1px dashed var(--border);
+  }
+  .expected-move b { color: var(--text); }
+
+  /* IBS breakdown mini-table */
+  .ibs-breakdown { width: 100%; border-collapse: collapse; margin: 10px 0 6px; font-size: 11.5px; }
+  .ibs-breakdown td { padding: 3px 6px; border-bottom: 1px solid var(--border); color: var(--text-dim); }
+  .ibs-breakdown td.lbl { white-space: nowrap; }
+  .ibs-breakdown td.val { text-align: right; font-family: ui-monospace, monospace; color: var(--text); width: 64px; }
+  .ibs-breakdown td.mini-bar-cell { width: 70px; }
+  .mini-bar-track { height: 6px; background: #1e293b; border-radius: 4px; overflow: hidden; }
+  [data-theme="light"] .mini-bar-track { background: #e2e8f0; }
+  .mini-bar-fill { height: 100%; }
+
+  .hv-meta { font-size: 12px; color: var(--text-dim); margin-top: 8px; }
+  .hv-meta .lab { color: var(--text-faint); font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
+  .hv-meta .risk { color: var(--red); }
+  .hv-signals { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .hv-signal-chip {
+    font-size: 10.5px; padding: 1px 7px; border-radius: 4px;
+    background: var(--bg-elev); border: 1px solid var(--border); color: var(--text-dim);
+  }
+
+  /* Predictions section */
+  .predictions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 800px) { .predictions-grid { grid-template-columns: 1fr; } }
+  .pred-column { border: 1px solid var(--border); border-radius: 10px; padding: 18px; background: var(--bg-elev); }
+  .pred-column.rise { border-color: var(--green-border); background: var(--green-bg); }
+  .pred-column.fall { border-color: var(--red-border); background: var(--red-bg); }
+  .pred-column .col-header { font-size: 18px; font-weight: 700; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+  .pred-column.rise .col-header { color: var(--green); }
+  .pred-column.fall .col-header { color: var(--red); }
+  .pick { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+  .pick .pick-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .pick .ticker { font-weight: 700; font-size: 16px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .pick .company { color: var(--text-dim); font-size: 13px; }
+  .pick .price { font-size: 13px; color: var(--text); }
+  .pick .change.pos { color: var(--green); font-weight: 600; }
+  .pick .change.neg { color: var(--red); font-weight: 600; }
+  .pick .score-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; font-family: ui-monospace, monospace; background: var(--bg-elev); border: 1px solid var(--border); }
+  .pick .reasoning { font-size: 13.5px; color: var(--text-dim); margin-top: 8px; line-height: 1.5; }
+  .pick .geo-tag { display: inline-block; font-size: 10px; padding: 1px 6px; background: rgba(110, 168, 255, 0.12); color: var(--accent); border: 1px solid rgba(110, 168, 255, 0.35); border-radius: 4px; margin-left: 6px; font-weight: 600; vertical-align: middle; }
+  .radar-block { border: 1px dashed var(--border); border-radius: 10px; padding: 14px 18px; margin-top: 16px; background: var(--bg-elev); }
+  .radar-block h3 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); }
+  .radar-block p { margin: 6px 0; font-size: 13.5px; color: var(--text-dim); }
+  .radar-block .geo-ticker, .radar-block .tkr { font-family: ui-monospace, monospace; color: var(--accent); font-weight: 600; }
+
+  /* Geopolitical section */
+  .geo-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .geo-card { background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 16px 18px; }
+  .geo-card .geo-theme { font-size: 16px; font-weight: 700; margin: 0 0 8px; color: var(--text); }
+  .geo-card .geo-context { font-size: 13.5px; color: var(--text-dim); margin: 0 0 12px; line-height: 1.55; }
+  .geo-card .geo-split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+  @media (max-width: 700px) { .geo-card .geo-split { grid-template-columns: 1fr; } }
+  .geo-side { border-radius: 6px; padding: 10px 12px; font-size: 13px; }
+  .geo-side.winners { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .geo-side.losers { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .geo-side .geo-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-bottom: 6px; }
+  .geo-side.winners .geo-label { color: var(--green); }
+  .geo-side.losers .geo-label { color: var(--red); }
+  .geo-side ul { margin: 0; padding-left: 18px; }
+  .geo-side li { margin-bottom: 4px; line-height: 1.5; }
+  .geo-side .geo-ticker { font-family: ui-monospace, monospace; font-weight: 600; color: var(--accent); }
+  .geo-card .geo-sources { margin-top: 10px; font-size: 12px; color: var(--text-faint); }
+  .geo-card .geo-sources a { color: var(--accent); text-decoration: none; margin-right: 10px; }
+  .geo-card .geo-sources a:hover { text-decoration: underline; }
+
+  /* News cards */
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+  .news-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .news-card .news-head { font-size: 15px; font-weight: 600; margin: 0 0 6px; line-height: 1.4; }
+  .news-card .news-meta { font-size: 12px; color: var(--text-faint); margin-bottom: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .news-card .ticker-chip { font-family: ui-monospace, monospace; font-size: 11px; background: var(--bg-elev); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; color: var(--accent); }
+  .news-card .catalyst-chip { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: var(--bg-elev); border: 1px solid var(--border); }
+  .news-card .catalyst-chip.pos { color: var(--green); border-color: var(--green-border); }
+  .news-card .catalyst-chip.neg { color: var(--red); border-color: var(--red-border); }
+  .news-card .catalyst-chip.neu { color: var(--text-dim); }
+  .news-card p.summary { margin: 8px 0; font-size: 13.5px; color: var(--text-dim); }
+  .news-card a.source { font-size: 12px; color: var(--accent); text-decoration: none; }
+  .news-card a.source:hover { text-decoration: underline; }
+
+  /* Fundamentals table */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+  table.fundamentals { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--bg-card); }
+  table.fundamentals th, table.fundamentals td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.fundamentals th { background: var(--bg-elev); font-weight: 600; cursor: pointer; user-select: none; position: sticky; top: 0; }
+  table.fundamentals th:hover { color: var(--accent); }
+  table.fundamentals th .sort-indicator { color: var(--text-faint); font-size: 10px; margin-left: 4px; }
+  table.fundamentals tbody tr:hover { background: var(--bg-elev); }
+  table.fundamentals td.num { text-align: right; font-family: ui-monospace, monospace; }
+  table.fundamentals td.ticker { font-family: ui-monospace, monospace; font-weight: 600; color: var(--accent); }
+
+  /* Footer */
+  footer.disclaimer { margin-top: 50px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-elev); color: var(--text-dim); font-size: 12.5px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="briefing">
+    <div class="title">
+      <h1>Daily Market Briefing — Thursday, June 18, 2026</h1>
+      <div class="meta">Generated June 17, 2026, 8:50 PM ET · Forward look to the June 18 session · US &amp; India coverage</div>
+      <p class="summary">Wall Street heads into Thursday nursing a hawkish-Fed hangover: new Chair Kevin Warsh kept rates on hold but the updated dot-plot tilted toward a possible <em>hike</em> later in 2026, sinking the S&amp;P and Nasdaq. Two pre-market earnings prints — Accenture and Kroger — are the day's clean binary catalysts. Oil keeps sliding on the fragile US-Iran ceasefire, helping India (a major oil importer) even as Dalal Street must first digest Wall Street's drop. Note: <b>US markets are closed Friday, June 19 for Juneteenth</b>, so Thursday is the last US session of the week.</p>
+      <div class="index-strip">
+        <span class="idx"><b>S&amp;P 500</b> 7,420.10 <span class="neg">−1.21%</span></span>
+        <span class="idx"><b>Nasdaq</b> 26,021.66 <span class="neg">−1.34%</span></span>
+        <span class="idx"><b>Dow</b> 51,492.55 <span class="neg">−0.98%</span></span>
+        <span class="idx"><b>Nifty 50</b> 24,085.70 <span class="pos">+0.40%</span></span>
+        <span class="idx"><b>WTI</b> ~$75.6 <span class="neg">−0.6%</span></span>
+        <span class="idx"><b>Gold</b> $4,254 <span class="neg">−1.77%</span></span>
+        <span class="idx"><b>US 10Y</b> 4.49% <span class="neg">+6bp</span></span>
+      </div>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle theme</button>
+  </header>
+
+  <!-- ============ HIGH-VOLTAGE INTRADAY PICKS ============ -->
+  <div class="hv-wrap">
+    <div class="hv-title">⚡ High-Voltage Intraday Picks</div>
+    <p class="hv-sub">Names with the catalyst + volatility profile to move <b>5%+ during Thursday's session</b>, scored on the Intraday Buzz Score (IBS, 0–100). These are short-term, event-driven setups — separate from the directional calls further down.</p>
+    <div class="hv-banner">
+      ⚠️ <b>High-risk, high-volatility intraday candidates.</b> These are speculative short-term plays, not investment recommendations. Most will not hit the target, and a few may move sharply in the opposite direction. For pre-market earnings names, the live "pre-market gap" IBS component can't be scored the night before — it is marked <i>pending</i> and would push the score higher if a gap confirms at the open.
+    </div>
+
+    <div class="hv-cols">
+      <!-- ===== LONGS ===== -->
+      <div class="hv-col longs">
+        <div class="hv-col-head">🔥 Buzz Longs — 5%+ upside candidates</div>
+
+        <div class="hv-market-label">United States</div>
+
+        <!-- ACN -->
+        <div class="hv-card long">
+          <div class="hv-card-head">
+            <span><span class="tkr">ACN</span> <span class="co">Accenture plc</span> <span class="conv-mod">⚡ MODERATE · BINARY</span></span>
+            <span class="px">$165.36 <span class="chg neg">−0.0%</span></span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:58%; background:var(--ibs-orange);"></div></div>
+            <div class="ibs-score-num">58<small>/100*</small></div>
+          </div>
+          <div class="expected-move">Expected move: <b>±5% to ±9%</b> on the print. Two-way — a relief bounce on a beat, or another leg down if AI-bookings commentary disappoints.</div>
+          <table class="ibs-breakdown">
+            <tr><td class="lbl">Catalyst strength</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:100%;background:var(--ibs-green)"></div></div></td><td class="val">35/35</td></tr>
+            <tr><td class="lbl">Volatility fuel</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:32%;background:var(--ibs-yellow)"></div></div></td><td class="val">8/25</td></tr>
+            <tr><td class="lbl">Pre-market gap</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:0%;"></div></div></td><td class="val">pending</td></tr>
+            <tr><td class="lbl">Social / momentum</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:50%;background:var(--ibs-orange)"></div></div></td><td class="val">5/10</td></tr>
+            <tr><td class="lbl">Float factor</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:0%;"></div></div></td><td class="val">0/10</td></tr>
+          </table>
+          <div class="hv-meta"><span class="lab">Catalyst:</span> Q3 FY26 results pre-market (~8:00 a.m. ET call). Consensus ≈ $3.70 EPS on ~$18.8B revenue; prediction markets imply ~92% chance of an EPS beat, and ACN has beaten four straight quarters. The stock sits near its 52-week low (~$165, down ~46% from highs), so expectations are washed out — the real swing factor is AI-consulting bookings and guidance, not the headline EPS.</div>
+          <div class="hv-meta"><span class="lab">Entry window:</span> Watch the 7:00–9:00 a.m. ET pre-market reaction; if a clean gap forms, the first 30–60 min after the 9:30 open tends to set the trend.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk:</span> A beat that comes with soft bookings or cautious client-spend commentary can still sell off — the "good but not good enough" trap on a battered name.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">Pre-market earnings</span>
+            <span class="hv-signal-chip">92% implied beat</span>
+            <span class="hv-signal-chip">Near 52-wk low</span>
+            <span class="hv-signal-chip">AI-consulting bellwether</span>
+          </div>
+        </div>
+
+        <!-- HOOD -->
+        <div class="hv-card long">
+          <div class="hv-card-head">
+            <span><span class="tkr">HOOD</span> <span class="co">Robinhood Markets</span> <span class="conv-mod">⚡ MODERATE</span></span>
+            <span class="px">$105.20 <span class="chg pos">+8.78%</span></span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:55%; background:var(--ibs-orange);"></div></div>
+            <div class="ibs-score-num">55<small>/100</small></div>
+          </div>
+          <div class="expected-move">Expected move: <b>+3% to +7%</b> continuation if momentum holds; high-beta name prone to sharp intraday reversals.</div>
+          <table class="ibs-breakdown">
+            <tr><td class="lbl">Catalyst strength</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:57%;background:var(--ibs-orange)"></div></div></td><td class="val">20/35</td></tr>
+            <tr><td class="lbl">Volatility fuel</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:40%;background:var(--ibs-yellow)"></div></div></td><td class="val">10/25</td></tr>
+            <tr><td class="lbl">Pre-market gap</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:50%;background:var(--ibs-orange)"></div></div></td><td class="val">10/20</td></tr>
+            <tr><td class="lbl">Social / momentum</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:100%;background:var(--ibs-green)"></div></div></td><td class="val">10/10</td></tr>
+            <tr><td class="lbl">Float factor</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:0%;"></div></div></td><td class="val">0/10</td></tr>
+          </table>
+          <div class="hv-meta"><span class="lab">Catalyst:</span> Jumped ~9% Wednesday on a 10% workforce reduction (cost-efficiency signal), record June trading volumes, and a wave of price-target raises (Argus to $110). A retail-favorite high-beta name with heavy options flow — classic momentum-continuation profile.</div>
+          <div class="hv-meta"><span class="lab">Entry window:</span> Best on a constructive pre-market hold above Wednesday's close; fade strength if it gaps up >4% and stalls.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk:</span> The catalyst partly played out Wednesday; chasing a stock already up ~9% invites a profit-taking reversal, especially in a risk-off tape.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">Momentum continuation</span>
+            <span class="hv-signal-chip">Multiple PT raises</span>
+            <span class="hv-signal-chip">Heavy retail/options</span>
+          </div>
+        </div>
+
+        <!-- QURE (watch) -->
+        <div class="hv-card watch">
+          <div class="hv-card-head">
+            <span><span class="tkr">QURE</span> <span class="co">uniQure N.V.</span> <span class="conv-watch">👀 VOLATILITY WATCH (2-way)</span></span>
+            <span class="px">$48.16 <span class="chg pos">+79%</span></span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:52%; background:var(--ibs-yellow);"></div></div>
+            <div class="ibs-score-num">52<small>/100</small></div>
+          </div>
+          <div class="expected-move">Expected move: <b>±10% to ±20%</b> intraday — direction uncertain. Catalyst already fired; this is a follow-through/whipsaw, not a fresh entry.</div>
+          <table class="ibs-breakdown">
+            <tr><td class="lbl">Catalyst strength</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:29%;background:var(--ibs-red)"></div></div></td><td class="val">10/35</td></tr>
+            <tr><td class="lbl">Volatility fuel</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:100%;background:var(--ibs-green)"></div></div></td><td class="val">25/25</td></tr>
+            <tr><td class="lbl">Pre-market gap</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:0%;"></div></div></td><td class="val">n/a</td></tr>
+            <tr><td class="lbl">Social / momentum</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:100%;background:var(--ibs-green)"></div></div></td><td class="val">10/10</td></tr>
+            <tr><td class="lbl">Float factor</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:70%;background:var(--ibs-orange)"></div></div></td><td class="val">7/10</td></tr>
+          </table>
+          <div class="hv-meta"><span class="lab">Catalyst:</span> Exploded ~80% Wednesday (from $26.99 to $48.16, ~7× average volume) after the FDA agreed three-year AMT-130 data could support an accelerated-approval filing for Huntington's disease; Cantor Fitzgerald upgraded to Overweight ($61 target). The move involved heavy call buying and short-covering.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk:</span> After an ~80% spike the catalyst is spent. Day-two action in biotech runners cuts both ways — momentum chasers and profit-takers collide. Treat as a discipline/volatility play, not a conviction long.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">FDA catalyst (spent)</span>
+            <span class="hv-signal-chip">Short-covering</span>
+            <span class="hv-signal-chip">Analyst upgrade</span>
+            <span class="hv-signal-chip">Extreme volume</span>
+          </div>
+        </div>
+
+        <div class="hv-market-label">India</div>
+
+        <!-- DIXON -->
+        <div class="hv-card long">
+          <div class="hv-card-head">
+            <span><span class="tkr">DIXON</span> <span class="co">Dixon Technologies</span> <span class="conv-mod">⚡ MODERATE · CATALYST PENDING</span></span>
+            <span class="px">₹12,770 <span class="chg pos">+4.5%</span></span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:54%; background:var(--ibs-yellow);"></div></div>
+            <div class="ibs-score-num">54<small>/100</small></div>
+          </div>
+          <div class="expected-move">Expected move: <b>+5% to +9%</b> if the formal Vivo-JV approval lands; muted/negative if approval slips again or CLSA's caution is heeded.</div>
+          <table class="ibs-breakdown">
+            <tr><td class="lbl">Catalyst strength</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:71%;background:var(--ibs-orange)"></div></div></td><td class="val">25/35</td></tr>
+            <tr><td class="lbl">Volatility fuel</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:24%;background:var(--ibs-red)"></div></div></td><td class="val">6/25</td></tr>
+            <tr><td class="lbl">Pre-market gap</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:50%;background:var(--ibs-orange)"></div></div></td><td class="val">10/20</td></tr>
+            <tr><td class="lbl">Social / momentum</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:50%;background:var(--ibs-orange)"></div></div></td><td class="val">5/10</td></tr>
+            <tr><td class="lbl">Float factor</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:40%;background:var(--ibs-yellow)"></div></div></td><td class="val">4/10</td></tr>
+          </table>
+          <div class="hv-meta"><span class="lab">Catalyst:</span> Rose ~5% Wednesday on reports an inter-ministerial panel gave in-principle approval to the long-pending Dixon-Vivo JV, with final MeitY clearance expected "this month." Management has guided the JV could add ~₹30,000 crore of revenue (24–39% revenue-estimate uplift over FY27–28). A formal approval headline is the binary trigger.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk:</span> CLSA downgraded to underperform June 16, flagging the rally running ahead of fundamentals and a soft FY27 outlook; Q4 net profit fell ~36% YoY. If approval timing slips, the buzz deflates.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">Govt-approval pending</span>
+            <span class="hv-signal-chip">China+1 EMS</span>
+            <span class="hv-signal-chip">JPMorgan top pick</span>
+          </div>
+        </div>
+
+        <!-- IDBI -->
+        <div class="hv-card long">
+          <div class="hv-card-head">
+            <span><span class="tkr">IDBI</span> <span class="co">IDBI Bank</span> <span class="conv-spec">👀 SPECULATIVE</span></span>
+            <span class="px">~₹90–91 <span class="chg pos">+19% intra</span></span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:48%; background:var(--ibs-yellow);"></div></div>
+            <div class="ibs-score-num">48<small>/100</small></div>
+          </div>
+          <div class="expected-move">Expected move: <b>±4% to ±8%</b> — momentum follow-through possible, but a sharp pullback after a ~19% intraday spike is equally likely.</div>
+          <table class="ibs-breakdown">
+            <tr><td class="lbl">Catalyst strength</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:43%;background:var(--ibs-yellow)"></div></div></td><td class="val">15/35</td></tr>
+            <tr><td class="lbl">Volatility fuel</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:40%;background:var(--ibs-yellow)"></div></div></td><td class="val">10/25</td></tr>
+            <tr><td class="lbl">Pre-market gap</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:50%;background:var(--ibs-orange)"></div></div></td><td class="val">10/20</td></tr>
+            <tr><td class="lbl">Social / momentum</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:60%;background:var(--ibs-orange)"></div></div></td><td class="val">6/10</td></tr>
+            <tr><td class="lbl">Float factor</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:70%;background:var(--ibs-orange)"></div></div></td><td class="val">7/10</td></tr>
+          </table>
+          <div class="hv-meta"><span class="lab">Catalyst:</span> Spiked as much as ~19% intraday Wednesday on heavy volume, the kind of rush typically tied to fresh strategic-sale/privatization newsflow (the government's long-running stake-sale process). Low effective float amplifies the moves.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk:</span> Privatization headlines are notoriously stop-start; a one-day pop on a rumor frequently round-trips. No confirmed deal yet — treat as a momentum/speculative play only.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">Privatization buzz</span>
+            <span class="hv-signal-chip">Big-volume spike</span>
+            <span class="hv-signal-chip">Low free float</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SHORTS ===== -->
+      <div class="hv-col shorts">
+        <div class="hv-col-head">💀 Buzz Shorts — 5%+ downside candidates</div>
+
+        <div class="hv-market-label">United States</div>
+
+        <!-- ACN short side -->
+        <div class="hv-card short">
+          <div class="hv-card-head">
+            <span><span class="tkr">ACN</span> <span class="co">Accenture — bear scenario</span> <span class="conv-mod">⚡ MODERATE · BINARY</span></span>
+            <span class="px">$165.36</span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:58%; background:var(--ibs-orange);"></div></div>
+            <div class="ibs-score-num">58<small>/100*</small></div>
+          </div>
+          <div class="expected-move">Downside scenario: <b>−5% to −9%</b> if Q3 bookings or guidance signal softening AI-consulting demand or further federal-business drag. Same binary event as the long case, opposite tail.</div>
+          <div class="hv-meta"><span class="lab">Why it could break down:</span> Multiple brokers cut targets into the print (Citi to $195 Neutral; others trimmed), technicals read "Strong Sell," and the market is hyper-focused on whether AI bookings convert to revenue. A soft tone re-rates the stock lower fast, Fed-risk tape amplifying it.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk to the short:</span> Washed-out sentiment + 92% implied beat odds mean a clean print can trigger a violent short-covering relief bounce instead.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">Broker PT cuts</span>
+            <span class="hv-signal-chip">"Strong Sell" technicals</span>
+            <span class="hv-signal-chip">AI-bookings scrutiny</span>
+          </div>
+        </div>
+
+        <div class="hv-market-label">India</div>
+
+        <!-- BSE short -->
+        <div class="hv-card short">
+          <div class="hv-card-head">
+            <span><span class="tkr">BSE</span> <span class="co">BSE Ltd</span> <span class="conv-mod">⚡ MODERATE</span></span>
+            <span class="px"><span class="chg neg">−4% Wed</span></span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:56%; background:var(--ibs-orange);"></div></div>
+            <div class="ibs-score-num">56<small>/100</small></div>
+          </div>
+          <div class="expected-move">Expected move: <b>−4% to −8%</b> on continued NSE-IPO newsflow; the competitive overhang is fresh and unresolved.</div>
+          <table class="ibs-breakdown">
+            <tr><td class="lbl">Catalyst strength</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:57%;background:var(--ibs-orange)"></div></div></td><td class="val">20/35</td></tr>
+            <tr><td class="lbl">Volatility fuel</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:40%;background:var(--ibs-yellow)"></div></div></td><td class="val">10/25</td></tr>
+            <tr><td class="lbl">Pre-market gap</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:50%;background:var(--ibs-orange)"></div></div></td><td class="val">10/20</td></tr>
+            <tr><td class="lbl">Social / momentum</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:60%;background:var(--ibs-orange)"></div></div></td><td class="val">6/10</td></tr>
+            <tr><td class="lbl">Float factor</td><td class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:0%;"></div></div></td><td class="val">0/10</td></tr>
+          </table>
+          <div class="hv-meta"><span class="lab">Catalyst:</span> BSE fell as much as ~4% Wednesday as rival NSE moved closer to its long-awaited IPO with reports of a Draft Red Herring Prospectus filing. A listed, larger NSE is a direct competitive and valuation threat to BSE's exchange monopoly premium.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk to the short:</span> If the NSE DRHP is delayed or denied, the overhang lifts and BSE can snap back. Exchange stocks are also sentiment-driven and can reverse with the broad tape.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">NSE IPO threat</span>
+            <span class="hv-signal-chip">Competitive re-rate</span>
+          </div>
+        </div>
+
+        <!-- TVS short -->
+        <div class="hv-card short">
+          <div class="hv-card-head">
+            <span><span class="tkr">TVSMOTOR</span> <span class="co">TVS Motor Co.</span> <span class="conv-spec">👀 SPECULATIVE</span></span>
+            <span class="px">₹361.70 <span class="chg neg">−8.10%</span></span>
+          </div>
+          <div class="ibs-row">
+            <div class="ibs-bar-track"><div class="ibs-bar-fill" style="width:46%; background:var(--ibs-yellow);"></div></div>
+            <div class="ibs-score-num">46<small>/100</small></div>
+          </div>
+          <div class="expected-move">Expected move: <b>−3% to −6%</b> if Wednesday's breakdown sees momentum follow-through; oversold bounce risk is real after −8%.</div>
+          <div class="hv-meta"><span class="lab">Catalyst:</span> Was the single worst Nifty-50 performer Wednesday, down ~8% as money rotated out of autos into retail, metals and defence. A sharp single-day breakdown on a heavyweight often carries short-term downside follow-through.</div>
+          <div class="hv-meta risk"><span class="lab">Key risk to the short:</span> After an 8% drop the name is oversold; a relief bounce or bargain-hunting can squeeze shorts quickly. No company-specific bad news confirmed — this is technical/rotation-driven.</div>
+          <div class="hv-signals">
+            <span class="hv-signal-chip">Worst Nifty stock Wed</span>
+            <span class="hv-signal-chip">Auto rotation-out</span>
+            <span class="hv-signal-chip">Momentum breakdown</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="hv-sub" style="margin-top:16px; font-size:12px;">*ACN's IBS excludes the live pre-market gap component (un-scoreable the night before). A confirming pre-market move on the earnings release would lift it into the 🔥 high-conviction band (≥70). Methodology: IBS = Catalyst (0–35) + Volatility fuel (0–25) + Pre-market gap (0–20) + Social/momentum (0–10) + Float factor (0–10).</p>
+  </div>
+
+  <!-- ============ PREDICTIONS ============ -->
+  <h2 class="section">Directional predictions — June 18 session</h2>
+  <div class="predictions-grid">
+
+    <div class="pred-column rise">
+      <div class="col-header">▲ Likely to rise</div>
+
+      <h3 class="subsection">United States</h3>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">ACN</span> <span class="company">Accenture plc</span></span>
+          <span class="price">$165.36 <span class="change neg">−0.0%</span></span>
+          <span class="score-badge">+3</span>
+        </div>
+        <div class="reasoning"><b>News +3:</b> Reports pre-market with ~92% implied odds of an EPS beat and a four-quarter beat streak. <b>Fundamentals +1:</b> Trades near a 52-week low at ~13× trailing earnings after a ~46% drawdown — washed-out expectations create relief-rally fuel. <b>Momentum −1:</b> Firmly in a downtrend ("Strong Sell" technicals). Net constructive into the print, but genuinely two-way — see the intraday section for the bear case.</div>
+      </div>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">HOOD</span> <span class="company">Robinhood Markets</span></span>
+          <span class="price">$105.20 <span class="change pos">+8.78%</span></span>
+          <span class="score-badge">+3</span>
+        </div>
+        <div class="reasoning"><b>News +3:</b> Workforce cut, record June volumes, and a cluster of price-target raises. <b>Fundamentals −1:</b> Rich at ~52× forward earnings. <b>Momentum +1:</b> Strong uptrend, retail favorite. Continuation candidate, but high-beta into a risk-off tape.</div>
+      </div>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">AVGO</span> <span class="company">Broadcom Inc.</span></span>
+          <span class="price">— <span class="change pos">+4.30%</span></span>
+          <span class="score-badge">+3</span>
+        </div>
+        <div class="reasoning"><b>News +2:</b> Outperformed Wednesday as chips recovered from Tuesday's slide on durable AI-infrastructure demand. <b>Fundamentals 0:</b> Premium valuation balanced by strong cash flows. <b>Momentum +1:</b> One of the few green megacaps in a down tape — relative-strength leadership.</div>
+      </div>
+
+      <h3 class="subsection">India</h3>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">DIXON</span> <span class="company">Dixon Technologies</span> <span class="geo-tag">🌐 Geopolitical</span></span>
+          <span class="price">₹12,770 <span class="change pos">+4.5%</span></span>
+          <span class="score-badge">+3</span>
+        </div>
+        <div class="reasoning"><b>News +2:</b> Vivo-JV approval reportedly imminent; management guides ~₹30,000 cr revenue uplift. <b>Geopolitical +1:</b> Prime China+1 electronics-manufacturing beneficiary. <b>Fundamentals −1:</b> Rich valuation, CLSA underperform call, Q4 profit −36% YoY. <b>Momentum +1:</b> Up ~12% over five sessions. The formal approval is the swing factor.</div>
+      </div>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">INDIGO</span> <span class="company">InterGlobe Aviation</span> <span class="geo-tag">🌐 Geopolitical</span></span>
+          <span class="price">— <span class="change neu">—</span></span>
+          <span class="score-badge">+3</span>
+        </div>
+        <div class="reasoning"><b>News 0 · Geopolitical +2:</b> Crude near three-month lows on the US-Iran ceasefire directly relieves jet-fuel costs (≈30% of airline opex) and a softer INR pressure. <b>Fundamentals +1:</b> Market leader with improving balance sheet. The clearest India-listed winner from falling oil — provided the ceasefire holds.</div>
+      </div>
+    </div>
+
+    <div class="pred-column fall">
+      <div class="col-header">▼ Likely to fall</div>
+
+      <h3 class="subsection">United States</h3>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">META</span> <span class="company">Meta Platforms</span></span>
+          <span class="price">$567.58 <span class="change neg">−5.44%</span></span>
+          <span class="score-badge">−4</span>
+        </div>
+        <div class="reasoning"><b>News −3:</b> Led the megacap-tech slide as the hawkish Fed dot-plot lifted yields, hitting long-duration growth hardest. <b>Fundamentals −1:</b> Rich multiple amplifies rate sensitivity. <b>Momentum 0:</b> Sharp one-day break. Rate-hike risk keeps pressure on high-multiple tech into Thursday; watch for an oversold bounce.</div>
+      </div>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">XOM</span> <span class="company">ExxonMobil</span> <span class="geo-tag">🌐 Geopolitical</span></span>
+          <span class="price">— <span class="change neu">—</span></span>
+          <span class="score-badge">−3</span>
+        </div>
+        <div class="reasoning"><b>News 0 · Geopolitical −3:</b> Energy majors face a headwind as crude slides from a wartime peak near $120 toward ~$75 on the Iran ceasefire and Strait of Hormuz reopening. <b>Fundamentals 0:</b> Reasonable valuation cushions but doesn't offset a falling-oil tape. Direction flips if the fragile deal collapses (see risk note in the geo section).</div>
+      </div>
+
+      <h3 class="subsection">India</h3>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">BSE</span> <span class="company">BSE Ltd</span></span>
+          <span class="price">— <span class="change neg">−4%</span></span>
+          <span class="score-badge">−5</span>
+        </div>
+        <div class="reasoning"><b>News −3:</b> NSE's reported DRHP filing brings its long-awaited IPO closer — a direct competitive and valuation threat to BSE's exchange premium. <b>Fundamentals −1:</b> Multiple vulnerable to a stronger listed rival. <b>Momentum −1:</b> Broke down Wednesday. Overhang persists until the NSE timeline clarifies.</div>
+      </div>
+
+      <div class="pick">
+        <div class="pick-head">
+          <span><span class="ticker">TVSMOTOR</span> <span class="company">TVS Motor Co.</span></span>
+          <span class="price">₹361.70 <span class="change neg">−8.10%</span></span>
+          <span class="score-badge">−3</span>
+        </div>
+        <div class="reasoning"><b>News −2:</b> Worst Nifty performer Wednesday as money rotated out of autos. <b>Fundamentals −1:</b> Premium auto valuation under pressure. <b>Momentum −1:</b> Decisive breakdown. Short-term follow-through likely, though −8% leaves it oversold and prone to a bounce.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- On the radar -->
+  <div class="radar-block">
+    <h3>On the radar — watch, no strong call</h3>
+    <p><span class="tkr">KR</span> <b>Kroger</b> — reports pre-market Thursday (~$1.58 EPS, ~$45.4B rev). A binary event, but a defensive staple rarely moves 5%+ absent a real surprise or guidance change; beat streak intact, JPMorgan at $70 Neutral.</p>
+    <p><span class="tkr">BEL</span> <b>Bharat Electronics</b> (+3.55%) &amp; <span class="tkr">TRENT</span> (+7.25%) — Wednesday's India leaders on defence/retail rotation, but valuations are rich and there's no fresh dated catalyst for Thursday.</p>
+    <p><span class="tkr">BIRD</span> <b>Allbirds</b> (+39%) &amp; <span class="tkr">ASTS</span> <b>AST SpaceMobile</b> (+3.67%) — small-cap movers from Wednesday; high volatility but thin/idiosyncratic signals, so they stay off the ranked lists.</p>
+  </div>
+
+  <!-- ============ GEOPOLITICAL IMPACT ============ -->
+  <h2 class="section">Geopolitical &amp; macro impact</h2>
+  <div class="geo-grid">
+
+    <article class="geo-card">
+      <h3 class="geo-theme">US–Iran ceasefire &amp; Strait of Hormuz reopening — oil keeps sliding</h3>
+      <p class="geo-context">The dominant cross-asset driver remains the framework deal between Washington and Tehran: a 60-day ceasefire plus a reopening of the Strait of Hormuz, which had been effectively blockaded since the war began in late February. Crude has retraced from a wartime high near $120 to roughly $75–76 (WTI) and $79–80 (Brent), easing inflation worries and lifting risk appetite earlier in the week. But the deal is fragile — speaking at the G7 on Wednesday, President Trump called it "not final" and warned the US could "go right back to dropping bombs," while analysts note it could take two to three months to clear the ~500 stranded vessels and normalise flows. That leaves a two-way tape: every step toward implementation pressures oil further; any breakdown sends it spiking back.</p>
+      <div class="geo-split">
+        <div class="geo-side winners">
+          <div class="geo-label">▲ Beneficiaries (of falling oil / de-escalation)</div>
+          <ul>
+            <li><span class="geo-ticker">DAL / UAL / AAL</span> — US airlines: lower jet fuel flows straight to margins</li>
+            <li><span class="geo-ticker">INDIGO.NS</span> — India's largest carrier; fuel + INR double tailwind</li>
+            <li><span class="geo-ticker">ASIANPAINT.NS / MRF.NS</span> — paints &amp; tyres: crude-derivative input relief</li>
+            <li><span class="geo-ticker">NIFTY broad</span> — India imports ~85% of crude; lower bill aids the rupee and importers</li>
+          </ul>
+        </div>
+        <div class="geo-side losers">
+          <div class="geo-label">▼ Victims (of falling oil)</div>
+          <ul>
+            <li><span class="geo-ticker">XOM / CVX / COP / OXY</span> — US energy majors de-rate as crude falls</li>
+            <li><span class="geo-ticker">SLB / HAL</span> — oilfield services track the crude curve lower</li>
+            <li><span class="geo-ticker">ONGC / OIL</span> — Indian upstream realisations compress</li>
+            <li><span class="geo-ticker">LMT / RTX</span> — defence premium fades if the ceasefire holds</li>
+          </ul>
+        </div>
+      </div>
+      <div class="geo-sources">
+        <a href="https://www.foxbusiness.com/economy/oil-prices-fluctuate-trumps-iran-deal-could-fully-reopen-strait-hormuz" target="_blank" rel="noopener">Fox Business</a>
+        <a href="https://www.nbcnews.com/business/markets/oil-prices-iran-deal-hormuz-doubts-rcna350087" target="_blank" rel="noopener">NBC News</a>
+        <a href="https://en.wikipedia.org/wiki/2026_Strait_of_Hormuz_crisis" target="_blank" rel="noopener">Background</a>
+      </div>
+    </article>
+
+    <article class="geo-card">
+      <h3 class="geo-theme">Hawkish Fed under new Chair Warsh — the macro overhang for Thursday</h3>
+      <p class="geo-context">Not geopolitical, but the single biggest force on Thursday's tape. The Fed's first meeting under Chair Kevin Warsh held rates steady, but the updated "dot-plot" discarded the prior rate-cut bias and tilted toward a possible hike later in 2026 — futures now price roughly a 60% chance of at least one hike this year. The statement leaned on a solid economy and sticky, Iran-war-related inflation. The reaction was textbook: long-duration growth and megacap tech sold off hardest (communication services −2.9%), the 10-year yield ticked to 4.49%, and even gold fell. Into Thursday this keeps the pressure on high-multiple tech and rate-sensitive names, while value, financials and cash-generative defensives screen relatively better.</p>
+      <div class="geo-split">
+        <div class="geo-side winners">
+          <div class="geo-label">▲ Relatively favoured</div>
+          <ul>
+            <li><span class="geo-ticker">Banks / financials</span> — a higher-for-longer curve supports net interest margins</li>
+            <li><span class="geo-ticker">Value / cash-flow defensives</span> — less duration risk than richly-valued growth</li>
+            <li><span class="geo-ticker">HOOD</span> — rate-sensitive but buoyed by its own volume/cost catalysts</li>
+          </ul>
+        </div>
+        <div class="geo-side losers">
+          <div class="geo-label">▼ Under pressure</div>
+          <ul>
+            <li><span class="geo-ticker">META / MSFT / AMZN</span> — long-duration megacaps most exposed to rising yields</li>
+            <li><span class="geo-ticker">High-multiple growth / unprofitable tech</span> — discount-rate headwind</li>
+            <li><span class="geo-ticker">Gold / GLD</span> — higher real yields weigh on non-yielding assets</li>
+          </ul>
+        </div>
+      </div>
+      <div class="geo-sources">
+        <a href="https://www.cnbc.com/2026/06/16/stock-market-today-live-updates.html" target="_blank" rel="noopener">CNBC</a>
+        <a href="https://www.schwab.com/learn/story/stock-market-update-open" target="_blank" rel="noopener">Schwab</a>
+        <a href="https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-june-17-2026" target="_blank" rel="noopener">TheStreet</a>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ============ US NEWS ============ -->
+  <h2 class="section">US market news</h2>
+  <div class="news-grid">
+
+    <article class="news-card">
+      <h3 class="news-head">Stocks slide as Fed's first Warsh-era dot-plot opens the door to a 2026 hike</h3>
+      <div class="news-meta"><span class="ticker-chip">^GSPC</span><span class="ticker-chip">^IXIC</span><span class="catalyst-chip neg">Macro / rates</span><span>Source: CNBC, TheStreet</span></div>
+      <p class="summary">The Fed left rates unchanged at Chair Warsh's first meeting but signalled the prior cut bias is gone, with policymakers now leaning toward a possible hike later in the year. The S&amp;P fell 1.2% and the Nasdaq 1.3%, led lower by megacap tech, as the 10-year yield rose to 4.49%.</p>
+      <a class="source" href="https://www.cnbc.com/2026/06/16/stock-market-today-live-updates.html" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">Accenture's pre-market Q3 report is Thursday's marquee AI-consulting test</h3>
+      <div class="news-meta"><span class="ticker-chip">ACN</span><span class="catalyst-chip neu">Earnings (pre-market)</span><span>Source: TechTimes, MarketBeat</span></div>
+      <p class="summary">With shares down ~46% from their highs, Accenture reports before the open with consensus near $3.70 EPS on ~$18.8B revenue. Prediction markets imply a ~92% beat probability, so the move hinges on AI-engagement bookings and client-spend guidance rather than the headline number.</p>
+      <a class="source" href="https://www.techtimes.com/articles/318408/20260615/accenture-earnings-june-18-three-metrics-now-determine-if-ai-consulting-real.htm" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">Kroger set to post Q1 before the bell; staples defensiveness in focus</h3>
+      <div class="news-meta"><span class="ticker-chip">KR</span><span class="catalyst-chip neu">Earnings (pre-market)</span><span>Source: Zacks, TheBull</span></div>
+      <p class="summary">The grocer reports Thursday pre-market with consensus around $1.58–1.59 EPS and ~$45.4B revenue, a sixth straight year-on-year EPS gain expected. Watch identical-sales ex-fuel, e-commerce profitability progress, and the pharmacy reimbursement headwind.</p>
+      <a class="source" href="https://www.tradingview.com/news/zacks:229420dea094b:0-the-kroger-co-gears-up-for-q1-earnings-key-elements-to-watch/" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">Robinhood jumps ~9% on 10% workforce cut, record June volumes and PT raises</h3>
+      <div class="news-meta"><span class="ticker-chip">HOOD</span><span class="catalyst-chip pos">Restructuring / upgrades</span><span>Source: Motley Fool</span></div>
+      <p class="summary">Robinhood rallied after announcing a 10% staff reduction alongside record monthly trading activity, prompting Argus to lift its target to $110. The stock trades near 52× forward earnings but is growing revenue and Gold subscribers briskly.</p>
+      <a class="source" href="https://www.fool.com/coverage/stock-market-today/2026/06/17/stock-market-today-june-17-robinhood-jumps-after-announcing-10-workforce-reduction-record-june-volumes/" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">uniQure rockets ~80% after FDA opens an accelerated path for its Huntington's gene therapy</h3>
+      <div class="news-meta"><span class="ticker-chip">QURE</span><span class="catalyst-chip pos">FDA / regulatory</span><span>Source: Reuters, Seeking Alpha</span></div>
+      <p class="summary">The FDA agreed three-year AMT-130 data could anchor an accelerated-approval filing — a reversal of last year's setback — sending shares from ~$27 to ~$48 on roughly seven times average volume. Cantor Fitzgerald upgraded to Overweight with a $61 target; a Q3 BLA submission is planned.</p>
+      <a class="source" href="https://www.investing.com/news/stock-market-news/why-is-uniqure-stock-surging-today-93CH-4747241" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">Megacap tech and BMW drag; La-Z-Boy and AST SpaceMobile buck the tape</h3>
+      <div class="news-meta"><span class="ticker-chip">META</span><span class="ticker-chip">ASTS</span><span class="catalyst-chip neu">Movers</span><span>Source: CNBC, Yahoo Finance</span></div>
+      <p class="summary">Meta fell ~5.4% leading a megacap retreat; BMW's US-listed shares dropped ~7% after a profit-outlook cut tied to China weakness and the Iran war. On the upside, La-Z-Boy surged ~16% on a retail-sales beat and AST SpaceMobile rose on a successful satellite launch.</p>
+      <a class="source" href="https://finance.yahoo.com/markets/stocks/articles/stock-market-today-june-17-212951273.html" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+  </div>
+
+  <!-- ============ INDIA NEWS ============ -->
+  <h2 class="section">India market news</h2>
+  <div class="news-grid">
+
+    <article class="news-card">
+      <h3 class="news-head">Nifty tops 24,000 for a fourth straight gain; VIX near three-month lows</h3>
+      <div class="news-meta"><span class="ticker-chip">^NSEI</span><span class="catalyst-chip pos">Index / sentiment</span><span>Source: NewsX, HDFC Sky</span></div>
+      <p class="summary">The Nifty closed at ~24,086 (+0.4%) and the Sensex added nearly 350 points, helped by easing geopolitics, returning foreign buying interest and sliding crude. India VIX fell to ~13.2. The risk for Thursday is an opening wobble as Dalal Street digests Wall Street's post-Fed drop.</p>
+      <a class="source" href="https://hdfcsky.com/news/nifty-50-top-gainers-and-losers-today-june-17-2026" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">Dixon climbs ~5% as government nears clearance for the Vivo joint venture</h3>
+      <div class="news-meta"><span class="ticker-chip">DIXON</span><span class="catalyst-chip pos">JV / approval</span><span>Source: Business Standard, Upstox</span></div>
+      <p class="summary">Reports that an inter-ministerial panel gave in-principle approval to the long-pending Dixon-Vivo JV (Dixon to hold 51%) lifted the stock, with final clearance expected this month. Management has flagged a potential ~₹30,000 cr revenue uplift; CLSA, however, recently moved to underperform on valuation.</p>
+      <a class="source" href="https://www.business-standard.com/markets/news/vivo-jv-approval-buzz-lifts-dixon-technologies-share-price-5-126061700260_1.html" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">BSE slides ~4% as NSE moves a step closer to its blockbuster IPO</h3>
+      <div class="news-meta"><span class="ticker-chip">BSE</span><span class="catalyst-chip neg">Competitive threat</span><span>Source: NewsX</span></div>
+      <p class="summary">Rival National Stock Exchange reportedly prepared to file its Draft Red Herring Prospectus, advancing a long-delayed listing. The prospect of a larger, listed NSE pressured BSE shares, which fell as much as 4% during the session.</p>
+      <a class="source" href="https://www.newsx.com/live-updates/sensex-today-nifty50-today-stock-market-live-updates-nifty-eyes-24000-as-gift-nifty-signals-flat-start-235063/" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">Trent leads, TVS Motor lags as money rotates into retail, metals and defence</h3>
+      <div class="news-meta"><span class="ticker-chip">TRENT</span><span class="ticker-chip">TVSMOTOR</span><span class="catalyst-chip neu">Sector rotation</span><span>Source: HDFC Sky</span></div>
+      <p class="summary">Trent jumped ~7.3% to top the Nifty while Bharat Electronics and Hindalco also gained; TVS Motor fell ~8.1% as the worst performer, with Cipla and Bajaj Finserv also soft. The rotation favoured retail, metals and defence over autos and healthcare.</p>
+      <a class="source" href="https://hdfcsky.com/news/nifty-50-top-gainers-and-losers-today-june-17-2026" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+    <article class="news-card">
+      <h3 class="news-head">IDBI Bank spikes ~19% intraday on heavy volume amid stake-sale chatter</h3>
+      <div class="news-meta"><span class="ticker-chip">IDBI</span><span class="catalyst-chip pos">Privatization buzz</span><span>Source: NewsX</span></div>
+      <p class="summary">IDBI Bank surged as much as ~19% before easing toward ₹90–91, accompanied by large volumes that pointed to a genuine rush of buyers rather than a quiet drift — the kind of move typically tied to the long-running strategic-sale process. No deal is confirmed.</p>
+      <a class="source" href="https://www.newsx.com/live-updates/sensex-today-nifty50-today-stock-market-live-updates-nifty-eyes-24000-as-gift-nifty-signals-flat-start-235063/" target="_blank" rel="noopener">Read original →</a>
+    </article>
+
+  </div>
+
+  <!-- ============ FUNDAMENTALS APPENDIX ============ -->
+  <h2 class="section">Fundamentals appendix</h2>
+  <p style="color:var(--text-dim); font-size:13px; margin-top:-6px;">Click any column header to sort. Figures are latest available as of June 17, 2026; "—" denotes data not captured this run. US prices in USD, India in INR.</p>
+  <div class="table-wrap">
+    <table class="fundamentals" id="fundamentals-table">
+      <thead>
+        <tr>
+          <th data-col="ticker">Ticker</th>
+          <th data-col="company">Company</th>
+          <th data-col="market">Mkt</th>
+          <th data-col="price" data-numeric="true">Price</th>
+          <th data-col="change" data-numeric="true">Chg %</th>
+          <th data-col="mcap" data-numeric="true">Mkt Cap</th>
+          <th data-col="pe" data-numeric="true">P/E</th>
+          <th data-col="eps" data-numeric="true">EPS (TTM)</th>
+          <th data-col="div" data-numeric="true">Div Yld</th>
+          <th data-col="52w" data-numeric="false">52W Range</th>
+          <th data-col="sector">Sector</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="ticker">ACN</td><td>Accenture plc</td><td>US</td><td class="num">$165.36</td><td class="num">−0.0%</td><td class="num">$103B</td><td class="num">13.4</td><td class="num">$12.20</td><td class="num">~1.9%</td><td>$155.82–$315.95</td><td>IT Services</td></tr>
+        <tr><td class="ticker">KR</td><td>Kroger Co.</td><td>US</td><td class="num">$64.04</td><td class="num">−0.1%</td><td class="num">$39.5B</td><td class="num">41.6</td><td class="num">$1.54</td><td class="num">2.16%</td><td>$58.60–$76.58</td><td>Food Retail</td></tr>
+        <tr><td class="ticker">HOOD</td><td>Robinhood Markets</td><td>US</td><td class="num">$105.20</td><td class="num">+8.78%</td><td class="num">~$92B</td><td class="num">~52 (fwd)</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Fintech / Brokerage</td></tr>
+        <tr><td class="ticker">QURE</td><td>uniQure N.V.</td><td>US</td><td class="num">$48.16</td><td class="num">+79%</td><td class="num">~$2.6B</td><td class="num">n/a (loss)</td><td class="num">−$3.40</td><td class="num">—</td><td>$8.73–$71.50</td><td>Biotech / Gene Therapy</td></tr>
+        <tr><td class="ticker">META</td><td>Meta Platforms</td><td>US</td><td class="num">$567.58</td><td class="num">−5.44%</td><td class="num">~$1.4T</td><td class="num">—</td><td class="num">—</td><td class="num">~0.3%</td><td>—</td><td>Communication Svcs</td></tr>
+        <tr><td class="ticker">AVGO</td><td>Broadcom Inc.</td><td>US</td><td class="num">—</td><td class="num">+4.30%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Semiconductors</td></tr>
+        <tr><td class="ticker">DIXON</td><td>Dixon Technologies</td><td>IN</td><td class="num">₹12,770</td><td class="num">+4.5%</td><td class="num">₹78,500 cr</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>₹9,600–₹18,471</td><td>EMS / Electronics</td></tr>
+        <tr><td class="ticker">TRENT</td><td>Trent Ltd</td><td>IN</td><td class="num">₹3,108</td><td class="num">+7.25%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Retail</td></tr>
+        <tr><td class="ticker">BEL</td><td>Bharat Electronics</td><td>IN</td><td class="num">—</td><td class="num">+3.55%</td><td class="num">—</td><td class="num">~45</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Defence</td></tr>
+        <tr><td class="ticker">TVSMOTOR</td><td>TVS Motor Co.</td><td>IN</td><td class="num">₹361.70</td><td class="num">−8.10%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Auto (2-wheeler)</td></tr>
+        <tr><td class="ticker">BSE</td><td>BSE Ltd</td><td>IN</td><td class="num">—</td><td class="num">−4.0%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Exchange</td></tr>
+        <tr><td class="ticker">IDBI</td><td>IDBI Bank</td><td>IN</td><td class="num">~₹90–91</td><td class="num">+19% intra</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Banking</td></tr>
+        <tr><td class="ticker">HINDALCO</td><td>Hindalco Industries</td><td>IN</td><td class="num">—</td><td class="num">+2.70%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>—</td><td>Metals</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="disclaimer">
+    <strong>Disclaimer:</strong> This report is generated from public news sources and financial data and is for informational purposes only. It is not investment advice. Stock predictions are inherently uncertain; geopolitical events are particularly difficult to forecast; do your own research and consult a licensed financial advisor before making investment decisions. The Intraday Buzz Score (IBS) is a heuristic scoring framework, not a measure of expected return — high-volatility setups can move sharply against the indicated direction.
+  </footer>
+
+</div>
+
+<script>
+  // Theme toggle
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+
+  // Sortable fundamentals table
+  (function() {
+    const table = document.getElementById('fundamentals-table');
+    if (!table) return;
+    const headers = table.querySelectorAll('th');
+    const tbody = table.querySelector('tbody');
+    let sortState = { col: null, asc: true };
+
+    headers.forEach((th, idx) => {
+      const indicator = document.createElement('span');
+      indicator.className = 'sort-indicator';
+      indicator.textContent = '↕';
+      th.appendChild(indicator);
+      th.addEventListener('click', () => sortBy(idx, th.dataset.numeric === 'true'));
+    });
+
+    function parseNum(s) {
+      if (s == null) return -Infinity;
+      const cleaned = String(s).replace(/[%,$₹+~]/g, '').trim();
+      const match = cleaned.match(/^(-?[\d.]+)\s*([TBMKtbmk]|cr|Cr|CR|L|l)?/);
+      if (!match) return -Infinity;
+      let n = parseFloat(match[1]);
+      const suf = (match[2] || '').toLowerCase();
+      if (suf === 't') n *= 1e12;
+      else if (suf === 'b') n *= 1e9;
+      else if (suf === 'm') n *= 1e6;
+      else if (suf === 'k') n *= 1e3;
+      else if (suf === 'cr') n *= 1e7;
+      else if (suf === 'l') n *= 1e5;
+      return isNaN(n) ? -Infinity : n;
+    }
+
+    function sortBy(colIdx, numeric) {
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const asc = sortState.col === colIdx ? !sortState.asc : true;
+      rows.sort((a, b) => {
+        const av = a.children[colIdx]?.textContent.trim() ?? '';
+        const bv = b.children[colIdx]?.textContent.trim() ?? '';
+        if (numeric) { return (parseNum(av) - parseNum(bv)) * (asc ? 1 : -1); }
+        return av.localeCompare(bv) * (asc ? 1 : -1);
+      });
+      rows.forEach(r => tbody.appendChild(r));
+      sortState = { col: colIdx, asc };
+      headers.forEach((h, i) => {
+        const ind = h.querySelector('.sort-indicator');
+        if (i === colIdx) ind.textContent = asc ? '↑' : '↓';
+        else ind.textContent = '↕';
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
